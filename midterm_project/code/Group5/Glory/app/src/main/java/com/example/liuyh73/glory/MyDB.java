@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.media.audiofx.DynamicsProcessing;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.RelativeLayout;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class MyDB extends SQLiteOpenHelper {
         executeAssetsSQL(sqLiteDatabase, "skills.sql");
         executeAssetsSQL(sqLiteDatabase, "skins.sql");
         executeAssetsSQL(sqLiteDatabase, "presents.sql");
+        executeAssetsSQL(sqLiteDatabase, "relations.sql");
     }
 
     @Override
@@ -424,5 +426,61 @@ public class MyDB extends SQLiteOpenHelper {
             );
         }
         return skin;
+    }
+
+    /**
+     * int hero_id;
+     * String name;
+     * String partner1;
+     * String partner1description;
+     * String partner2;
+     * String partner2description;
+     * String repress1;
+     * String repress1description;
+     * String repress2;
+     * String repress2description;
+     * String repressed1;
+     * String repressed1description;
+     * String repressed2;
+     * String repressed2description;
+     */
+    public Relation getRelationsByHeroName(String name){
+        SQLiteDatabase db = getReadableDatabase();
+        String selection = "name = ?";
+        String []selectionArgs = {name};
+        Relation relation = null;
+        Cursor cursor = db.query(Configuration.RELATION_TABLE_NAME, null, selection, selectionArgs, null, null, null);
+        if(cursor.moveToNext()){
+            relation = new Relation(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    cursor.getString(5),
+                    cursor.getString(6),
+                    cursor.getString(7),
+                    cursor.getString(8),
+                    cursor.getString(9),
+                    cursor.getString(10),
+                    cursor.getString(11),
+                    cursor.getString(12),
+                    cursor.getString(13)
+            );
+        }
+        return relation;
+    }
+
+    public Relation getRelationsByHeroId(int hero_id){
+        SQLiteDatabase db =getReadableDatabase();
+        String[] columns = {"name"};
+        String selection = "hero_id = ?";
+        String[] selectionArgs = {String.valueOf(hero_id)};
+        Cursor cursor = db.query(Configuration.HERO_TABLE_NAME, columns, selection, selectionArgs, null, null, null);
+        Relation relation = null;
+        if(cursor.moveToNext()){
+            relation = getRelationsByHeroName(cursor.getString(0));
+        }
+        return relation;
     }
 }

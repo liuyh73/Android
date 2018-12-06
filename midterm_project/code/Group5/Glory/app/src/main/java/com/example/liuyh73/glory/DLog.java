@@ -36,7 +36,6 @@ public class DLog {
         }
     }
 
-
     public static void setDebug(boolean debug) {
         isDebug = debug;
     }

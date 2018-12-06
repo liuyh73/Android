@@ -2,8 +2,12 @@ package com.example.liuyh73.glory;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -45,10 +49,10 @@ public class AddActivity extends AppCompatActivity {
             showData.add(data.get(i));
         }
 
-        final SwipeRefreshLayout mySwipeRefreshLayout = findViewById(R.id.mySwipeRefreshLayout);
+        final CustomSwipeRefreshLayout mySwipeRefreshLayout = findViewById(R.id.mySwipeRefreshLayout);
 
         //设置下拉出现小圆圈是否是缩放出现，出现的位置，最大的下拉位置
-        mySwipeRefreshLayout.setProgressViewOffset(true, 10, 50);
+        mySwipeRefreshLayout.setProgressViewOffset(true, 100, 200);
 
         //设置下拉圆圈的大小，两个值 LARGE， DEFAULT
         mySwipeRefreshLayout.setSize(SwipeRefreshLayout.LARGE);
@@ -95,7 +99,7 @@ public class AddActivity extends AppCompatActivity {
                 // set item background
                 addItem.setBackground(new ColorDrawable(Color.rgb(0xC9, 0xC9,0xCE)));
                 // set item width
-                addItem.setWidth(dp2px(getApplicationContext(),90));
+                addItem.setWidth(dp2px(getApplicationContext(),80));
                 // set item title
                 addItem.setTitle("Add");
                 // set item title fontsize
@@ -113,7 +117,7 @@ public class AddActivity extends AppCompatActivity {
                 // set item background
                 editItem.setBackground(new ColorDrawable(Color.rgb(0xF9, 0x3F, 0x25)));
                 // set item width
-                editItem.setWidth(dp2px(getApplicationContext(),90));
+                editItem.setWidth(dp2px(getApplicationContext(),80));
                 // add to menu
                 menu.addMenuItem(editItem);
             }
@@ -121,6 +125,9 @@ public class AddActivity extends AppCompatActivity {
 
 
         final SwipeMenuListView listView = findViewById(R.id.SwipeMenuListView);
+
+        listView.setDividerHeight(dp2px(AddActivity.this,10));
+
         // set creator
         listView.setMenuCreator(creator);
         myAdapter = new MyListViewAdapter(this, showData);
@@ -176,7 +183,7 @@ public class AddActivity extends AppCompatActivity {
                 searchFragment.setOnSearchClickListener(new IOnSearchClickListener() {
                     @Override
                     public void OnSearchClick(String keyword) {
-                        //这里处理逻辑
+                        // 处理逻辑
                         // Toast.makeText(AddActivity.this, keyword, Toast.LENGTH_SHORT).show();
                         listView.setTag(1);
                         showData = (search(keyword, data));
@@ -186,6 +193,10 @@ public class AddActivity extends AppCompatActivity {
                 searchFragment.show(getSupportFragmentManager(),SearchFragment.TAG);
             }
         });
+        // 背景图
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.mipmap.background);
+        bitmap = BlurBitmapUtil.blurBitmap(AddActivity.this,bitmap,15f);
+        listView.setBackground(new BitmapDrawable(getResources(), bitmap));
 
     }
 

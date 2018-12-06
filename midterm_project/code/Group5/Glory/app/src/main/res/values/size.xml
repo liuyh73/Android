@@ -13,4 +13,10 @@
     <dimen name="pagerSlidingTabStripSize">30dp</dimen>
     <dimen name="introduceMarginHorizontalSize">20dp</dimen>
     <dimen name="introduceMarginTopSize">10dp</dimen>
+    <dimen name="skillNameWidth">130dp</dimen>
+    <dimen name="skillNameTextSize">18sp</dimen>
+    <dimen name="skillTipsPaddingHorizontalSize">5dp</dimen>
+    <dimen name="skillTipsMarginTopSize">10dp</dimen>
+    <dimen name="detailSkillRecoveryTimeWidth">70dp</dimen>
+    <dimen name="middleTextSize">20sp</dimen>
 </resources>

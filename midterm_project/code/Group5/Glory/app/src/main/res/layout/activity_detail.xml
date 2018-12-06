@@ -3,7 +3,8 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:id="@+id/scrollView"
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,30 +17,40 @@
             <com.astuetz.PagerSlidingTabStrip
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/pagerSlidingTabStripSize"
+                custom:pstsTabTextSize="@dimen/middleTextSize"
                 android:id="@+id/detailPagerSlidingTabStrip"
+                android:background="@color/colorPrimary"
                 android:layout_alignParentTop="true"/>
 
             <android.support.v4.view.ViewPager
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:id="@+id/detailViewPage"
-                android:layout_below="@+id/detailPagerSlidingTabStrip"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:id="@+id/detailHeroName"
-                android:textColor="@color/detailHeroName"
                 android:layout_below="@id/detailPagerSlidingTabStrip"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/detailPositioning"
-                android:textColor="@color/detailCoverName"
-                android:textSize="@dimen/abilitiesTextSize"
-                android:layout_below="@id/detailHeroName"/>
+                android:orientation="vertical"
+                android:background="@color/detailAbilitiesBackground"
+                android:padding="@dimen/skillTipsPaddingHorizontalSize"
+                android:alpha="0.7"
+                android:layout_below="@id/detailPagerSlidingTabStrip">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:id="@+id/detailHeroName"
+                    android:textColor="@color/detailHeroName"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/detailPositioning"
+                    android:textColor="@color/detailCoverName"
+                    android:textSize="@dimen/abilitiesTextSize"/>
+            </LinearLayout>
+
 
         </RelativeLayout>
 
@@ -162,38 +173,44 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!--<com.example.liuyh73.glory.HorizontalListView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="100dp"-->
-            <!--android:background="@color/HorizontalListViewBackground"-->
-            <!--android:id="@+id/detailListView">-->
-
-        <!--</com.example.liuyh73.glory.HorizontalListView>-->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
+                android:orientation="vertical"
                 android:background="@drawable/border_line"
-                android:textSize="@dimen/detailIntroduceSize"
-                android:text="@string/detailSkillIntroduce"
                 android:onClick="showSkills"
-                android:id="@+id/detailAbilitiesSkillIntroduceText"
-                android:layout_weight="1"/>
-
-            <TextView
+                android:layout_weight="1"
+                android:id="@+id/detailSkillIntroduceLinearLayout">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:drawable="@mipmap/book"
+                    android:textSize="@dimen/detailIntroduceSize"
+                    android:text="@string/detailSkillIntroduce"
+                    android:id="@+id/detailAbilitiesSkillIntroduceText"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
+                android:orientation="vertical"
                 android:onClick="showOutfit"
-                android:id="@+id/detailOutfitSuggestionText"
-                android:layout_weight="1"
-                android:textSize="@dimen/detailIntroduceSize"
-                android:text="@string/detailOutfitSuggestion"/>
+                android:id="@+id/detailOutfitSuggestionLinearLayout"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:drawable="@mipmap/head"
+                    android:id="@+id/detailOutfitSuggestionText"
+                    android:textSize="@dimen/detailIntroduceSize"
+                    android:text="@string/detailOutfitSuggestion"/>
+            </LinearLayout>
+
         </LinearLayout>
 
         <HorizontalScrollView
@@ -213,7 +230,6 @@
                     android:layout_weight="1"
                     android:background="@mipmap/item2"
                     android:padding="10dp"
-                    android:src="@mipmap/s50800"
                     app:civ_border_color="#FF000000"
                     app:civ_border_width="2dp" />
 
@@ -224,7 +240,6 @@
                     android:layout_weight="1"
                     android:background="@mipmap/item1"
                     android:padding="10dp"
-                    android:src="@mipmap/s50800"
                     app:civ_border_color="#FF000000"
                     app:civ_border_width="2dp" />
 
@@ -235,7 +250,6 @@
                     android:layout_weight="1"
                     android:background="@mipmap/item1"
                     android:padding="10dp"
-                    android:src="@mipmap/s50800"
                     app:civ_border_color="#FF000000"
                     app:civ_border_width="2dp" />
 
@@ -246,7 +260,6 @@
                     android:layout_weight="1"
                     android:background="@mipmap/item1"
                     android:padding="10dp"
-                    android:src="@mipmap/s50800"
                     app:civ_border_color="#FF000000"
                     app:civ_border_width="2dp" />
             </LinearLayout>
@@ -255,7 +268,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/detailOutfitSuggestion"
+            android:id="@+id/detailOutfitSuggestionList"
+            android:visibility="gone"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -268,13 +282,16 @@
                     android:onClick="showOutfit1"
                     android:id="@+id/outfitSuggestion1"
                     android:background="@drawable/border_line"
+                    android:textSize="@dimen/middleTextSize"
                     android:text="@string/detailOutfitSuggestion1"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@color/colorWhite"
                     android:textAlignment="center"
                     android:onClick="showOutfit2"
                     android:id="@+id/outfitSuggestion2"
+                    android:textSize="@dimen/middleTextSize"
                     android:layout_weight="1"
                     android:text="@string/detailOutfitSuggestion2"/>
             </LinearLayout>
@@ -294,7 +311,6 @@
                         android:id="@+id/equip1"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
-                        android:src="@mipmap/s1422"
                         app:civ_border_color="#FF000000"
                         app:civ_border_width="2dp" />
                 </LinearLayout>
@@ -310,7 +326,6 @@
                         android:id="@+id/equip2"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
-                        android:src="@mipmap/s1422"
                         app:civ_border_color="#FF000000"
                         app:civ_border_width="2dp" />
                 </LinearLayout>
@@ -326,7 +341,6 @@
                         android:id="@+id/equip3"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
-                        android:src="@mipmap/s1422"
                         app:civ_border_color="#FF000000"
                         app:civ_border_width="2dp" />
                 </LinearLayout>
@@ -348,7 +362,6 @@
                         android:id="@+id/equip4"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
-                        android:src="@mipmap/s1422"
                         app:civ_border_color="#FF000000"
                         app:civ_border_width="2dp" />
                 </LinearLayout>
@@ -363,7 +376,6 @@
                         android:id="@+id/equip5"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
-                        android:src="@mipmap/s1422"
                         app:civ_border_color="#FF000000"
                         app:civ_border_width="2dp" />
                 </LinearLayout>
@@ -379,19 +391,76 @@
                         android:id="@+id/equip6"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
-                        android:src="@mipmap/s1422"
                         app:civ_border_color="#FF000000"
                         app:civ_border_width="2dp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/detailAbilitiesBackground"
+            android:alpha="0.7"
             android:layout_marginTop="@dimen/introduceMarginTopSize"
             android:layout_marginStart="@dimen/introduceMarginHorizontalSize"
             android:layout_marginEnd="@dimen/introduceMarginHorizontalSize"
-            android:id="@+id/detailIntroduce"/>
+            android:id="@+id/detailSkill">
+
+            <TextView
+                android:layout_width="@dimen/skillNameWidth"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/skillNameTextSize"
+                android:textStyle="bold"
+                android:id="@+id/detailSkillName"/>
+
+            <TextView
+                android:layout_width="@dimen/detailSkillRecoveryTimeWidth"
+                android:layout_height="wrap_content"
+                android:id="@+id/detailSkillRecoveryTime"
+                android:layout_toEndOf="@id/detailSkillName"
+                android:textColor="@color/colorWhite"
+                android:layout_alignBottom="@id/detailSkillName"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/detailSkillSpend"
+                android:textColor="@color/colorWhite"
+                android:layout_toEndOf="@id/detailSkillRecoveryTime"
+                android:layout_alignBottom="@id/detailSkillRecoveryTime"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
+                android:layout_below="@id/detailSkillName"
+                android:id="@+id/detailSkillIntroduce"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detailSkillIntroduce"
+                android:id="@+id/detailSkillTips"
+                android:layout_marginTop="@dimen/skillTipsMarginTopSize"
+                android:paddingStart="@dimen/skillTipsPaddingHorizontalSize"
+                android:paddingEnd="@dimen/skillTipsPaddingHorizontalSize"
+                android:background="@color/tipsBackgroundColor"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/introduceMarginTopSize"
+            android:layout_marginStart="@dimen/introduceMarginHorizontalSize"
+            android:layout_marginEnd="@dimen/introduceMarginHorizontalSize"
+            android:id="@+id/detailEquipIntroduce"
+            android:background="@color/tipsBackgroundColor"
+            android:paddingStart="@dimen/skillTipsPaddingHorizontalSize"
+            android:paddingEnd="@dimen/skillTipsPaddingHorizontalSize"/>
     </LinearLayout>
 </ScrollView>

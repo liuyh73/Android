@@ -2,13 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#00000000">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/white"
         android:orientation="vertical"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:alpha="0.85">
 
         <!-- 英雄部分信息  -->
         <RelativeLayout
@@ -33,7 +35,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/popup_title"
                 android:text="廉颇"
-                android:textSize="50dp"/>
+                android:textSize="50dp"
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/popup_type"
@@ -67,14 +70,16 @@
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:layout_margin="5dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:background="#00000000">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="生存能力"
                 android:textSize="20dp"
-                android:layout_marginRight="5dp"/>
+                android:layout_marginRight="5dp"
+                android:textColor="#1c8fea"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -100,14 +105,16 @@
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:layout_margin="5dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:background="#00000000">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="攻击伤害"
                 android:textSize="20dp"
-                android:layout_marginRight="5dp"/>
+                android:layout_marginRight="5dp"
+                android:textColor="#e7ca63"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -140,7 +147,8 @@
                 android:layout_height="wrap_content"
                 android:text="技能效果"
                 android:textSize="20dp"
-                android:layout_marginRight="5dp"/>
+                android:layout_marginRight="5dp"
+                android:textColor="#5dd473"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -173,7 +181,8 @@
                 android:layout_height="wrap_content"
                 android:text="上手难度"
                 android:textSize="20dp"
-                android:layout_marginRight="5dp"/>
+                android:layout_marginRight="5dp"
+                android:textColor="#e84a33"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -209,7 +218,8 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/popup_save"
                 android:id="@+id/popup_add"
-                android:text="Add" />
+                android:text="Add"
+                android:textColor="#0000CD"/>
 
             <Button
                 android:layout_width="wrap_content"
@@ -217,7 +227,8 @@
                 android:id="@+id/popup_save"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/popup_add"
-                android:text="Save"/>
+                android:text="Save"
+                android:textColor="#00BFFF"/>
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 </RelativeLayout>

@@ -1,33 +1,50 @@
 package com.example.liuyh73.glory;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SeekBar;
-
+import android.widget.Toast;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.ryan.rv_gallery.AnimManager;
 import com.ryan.rv_gallery.GalleryRecyclerView;
 import com.ryan.rv_gallery.util.DLog;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MainActivity extends AppCompatActivity implements GalleryRecyclerView.OnItemClickListener,RecyclerAdapter.OnItemPhotoChangedListener {
+public class MainActivity extends AppCompatActivity implements RecyclerAdapter.OnItemPhotoChangedListener {
     private MyDB db;
     private GalleryRecyclerView mRecyclerView;
     private RecyclerAdapter adapter;
@@ -35,12 +52,14 @@ public class MainActivity extends AppCompatActivity implements GalleryRecyclerVi
     private List<Hero> mDatas;
     private SeekBar mSeekbar;
     private ImageView loadImage;
+    private SearchView searchView;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private Button classBtn;
     private static Hero clickedHero;
+    private List<String> mListData;
     private boolean wetherAddHero = false;
-    public static Hero getClickedHero(){
-        Hero temp = clickedHero;
-        return temp;
-    }
+    private MediaPlayer mediaPlayer;
     //Handler
     private Handler mHandler = new Handler(){
         @Override
@@ -61,18 +80,28 @@ public class MainActivity extends AppCompatActivity implements GalleryRecyclerVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        playBackgroundMusic();
         DLog.setDebug(true);
         DLog.d("MainPage: ", "MainActivity onCreate()");
         db = new MyDB(MainActivity.this);
+        mListData = new ArrayList<>();
         loadImage = findViewById(R.id.mainPageLoad);
         mDatas = db.getAllPresentHeros();
         FloatingActionButton addBtn = findViewById(R.id.mainPageAddHero);
         mRecyclerView = findViewById(R.id.mainPageRecyclerView);
         mContainer = findViewById(R.id.mainPageAll);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerList = findViewById(R.id.left_drawer);
+        classBtn = findViewById(R.id.mainPageHerosClass);
+
+        searchView = findViewById(R.id.mainPageSearchView);
+        searchView.setIconifiedByDefault(true);
+        searchView.clearFocus();
+
         mSeekbar = findViewById(R.id.seekBar);
         mSeekbar.setMax(mDatas.size()-1);
         //延时展示
-        delayDispaly(2000);
+        delayDispaly(900);
         //关闭seekbar点击效果
         mSeekbar.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -95,10 +124,35 @@ public class MainActivity extends AppCompatActivity implements GalleryRecyclerVi
                 startActivity(intent);
             }
         });
+        //搜索
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                int pos = 0;
+                for (Hero hero : mDatas) {
+                    if(hero.getName().equals(query)){
+                        mRecyclerView.smoothScrollToPosition(pos);
+                        searchView.onActionViewCollapsed();
+                        return false;
+                    }
+                    pos++;
+                }
+                Toast.makeText(MainActivity.this,"The hero doesn't exit in this page.",Toast.LENGTH_LONG).show();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
+
+        //侧边栏
+        initDrawerLayout();
     }
 
     private void initRecycleViewAdapter() {
-        adapter = new RecyclerAdapter(mDatas) {
+        adapter = new RecyclerAdapter(mDatas,MainActivity.this) {
             @Override
             public int getLayoutId(int viewType) {
                 return R.layout.hero_item;
@@ -118,8 +172,6 @@ public class MainActivity extends AppCompatActivity implements GalleryRecyclerVi
                 .setAnimFactor(0.1f)
                 // 设置切换动画类型，目前有AnimManager.ANIM_BOTTOM_TO_TOP和目前有AnimManager.ANIM_TOP_TO_BOTTOM
                 .setAnimType(AnimManager.ANIM_BOTTOM_TO_TOP)
-                // 设置点击事件
-                .setOnItemClickListener(this)
                 // 设置自动播放
                 .autoPlay(false)
                 // 设置自动播放间隔时间 ms
@@ -143,6 +195,54 @@ public class MainActivity extends AppCompatActivity implements GalleryRecyclerVi
         setBlurImage(false);
     }
 
+    private void initDrawerLayout(){
+        //ListView
+        final mainPage_ListViewAdapter listViewAdapter = new mainPage_ListViewAdapter(MainActivity.this,R.layout.mainpage_listview_item,mListData);
+        mDrawerList.setAdapter(listViewAdapter);
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(position > 0){
+                    String heroName = mListData.get(position);
+                    if(mListData.get(0).equals("类型")){
+                        List<String> tempList = db.getHerosNameByType(heroName);
+                        mListData.clear();
+                        mListData.add("英雄名称");
+                        mListData.addAll(tempList);
+                        listViewAdapter.notifyDataSetChanged();
+                    } else {
+                        int pos = 0;
+                        for (Hero hero : mDatas) {
+                            if(hero.getName().equals(heroName)){
+                                mRecyclerView.smoothScrollToPosition(pos);
+                                searchView.onActionViewCollapsed();
+                                mDrawerLayout.closeDrawers();
+                                return;
+                            }
+                            pos++;
+                        }
+                    }
+                }
+            }
+        });
+        //类别按钮点击
+        classBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListData.clear();
+                mListData.add("类型");
+                mListData.add("战士");
+                mListData.add("法师");
+                mListData.add("射手");
+                mListData.add("刺客");
+                mListData.add("辅助");
+                mListData.add("坦克");
+                listViewAdapter.notifyDataSetChanged();
+                mDrawerLayout.openDrawer(mDrawerList);
+            }
+        });
+    }
+
     //设置背景高斯模糊
     public void setBlurImage(boolean forceUpdate) {
         final RecyclerAdapter adapter = (RecyclerAdapter) mRecyclerView.getAdapter();
@@ -162,12 +262,20 @@ public class MainActivity extends AppCompatActivity implements GalleryRecyclerVi
                     return;
                 }
                 ImageView imageView = cardView.findViewById(R.id.hero_photo);
-                Drawable drawable = imageView.getDrawable();
+                final Drawable drawable = imageView.getDrawable();
                 //图片是否已经加载
                 if(drawable == null){
-                    DownloadImage.setLinnerLayoutViewImage(mContainer,mDatas.get(mCurViewPosition).getSkins().get(0).getImg_url(),mRecyclerView.getContext());
+                    Glide.with(MainActivity.this).load(mDatas.get(mCurViewPosition).getSkins().get(0).getImg_url()).into(new SimpleTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                            Bitmap bitmap = ((BitmapDrawable)resource).getBitmap();
+                            bitmap = BlurBitmapUtil.cropBitmap(bitmap);
+                            BlurBitmapUtil.setBlur(bitmap,mContainer,mRecyclerView.getContext());
+                        }
+                    });
                 } else {
-                    BlurBitmapUtil.setBlur(((BitmapDrawable)drawable).getBitmap(),mContainer,mRecyclerView.getContext());
+                    Bitmap bitmap = BlurBitmapUtil.cropBitmap(((BitmapDrawable)drawable).getBitmap());
+                    BlurBitmapUtil.setBlur(bitmap,mContainer,mRecyclerView.getContext());
                 }
                 // 记录上一次高斯模糊的位置
                 mLastDraPosition = mCurViewPosition;
@@ -179,10 +287,11 @@ public class MainActivity extends AppCompatActivity implements GalleryRecyclerVi
     protected void onResume() {
         super.onResume();
         if(wetherAddHero){
-            delayDispaly(1500);
             wetherAddHero = !wetherAddHero;
-            mDatas = db.getAllPresentHeros();
+            mDatas.clear();
+            mDatas.addAll(db.getAllPresentHeros());
             mSeekbar.setMax(mDatas.size()-1);
+            DLog.d("MainPage: ", "MainActivity onResume: mDatas-"+mDatas.size());
             adapter.notifyDataSetChanged();
         }
         DLog.d("MainPage: ", "MainActivity onResume()");
@@ -218,13 +327,9 @@ public class MainActivity extends AppCompatActivity implements GalleryRecyclerVi
             // 释放资源
             mRecyclerView.release();
         }
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        clickedHero = mDatas.get(position);
-        Intent intent = new Intent(MainActivity.this,DetailActivity.class);
-        startActivity(intent);
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+        }
     }
 
     @Override
@@ -249,5 +354,25 @@ public class MainActivity extends AppCompatActivity implements GalleryRecyclerVi
             }
         };
         mTimer.schedule(mTimerTask, delay);//延迟2秒执行
+    }
+
+    public static Hero getClickedHero(){
+        Hero temp = clickedHero;
+        return temp;
+    }
+
+    public static void  setClickedHero(Hero hero){
+        clickedHero = hero;
+    }
+
+    public void playBackgroundMusic() {
+        mediaPlayer = MediaPlayer.create(this, R.raw.glory_theme);
+        mediaPlayer.start();
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mediaPlayer.start();
+            }
+        });
     }
 }

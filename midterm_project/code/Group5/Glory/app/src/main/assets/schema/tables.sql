@@ -68,3 +68,22 @@ CREATE TABLE `present` (
     `hero_type` varchar(255) NOT NULL,
     PRIMARY KEY(`hero_id`)
 );
+
+DROP TABLE IF EXISTS `relation`;
+CREATE TABLE `relation` (
+    `hero_id` int(11) NOT NULL,
+    `name` varchar(255) NOT NULL,
+    `partner1` varchar(255) NOT NULL,
+    `partner1description` varchar(1024) NOT NULL,
+    `partner2` varchar(255) NOT NULL,
+    `partner2description` varchar(1024) NOT NULL,
+    `repress1` varchar(255) NOT NULL,
+    `repress1description` varchar(1024) NOT NULL,
+    `repress2` varchar(255) NOT NULL,
+    `repress2description` varchar(1024) NOT NULL,
+    `repressed1` varchar(255) NOT NULL,
+    `repressed1description` varchar(1024) NOT NULL,
+    `repressed2` varchar(255) NOT NULL,
+    `repressed2description` varchar(1024) NOT NULL,
+    PRIMARY KEY(`hero_id`)
+);

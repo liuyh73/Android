@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.MemoryCategory;
 
 import java.util.ArrayList;
 
@@ -66,7 +68,7 @@ public class MyListViewAdapter extends BaseAdapter {
         viewHolder.name.setText(list.get(i).getName());
         viewHolder.type.setText(list.get(i).getHero_type());
         viewHolder.title.setText(list.get(i).getTitle());
-        DownloadImage.setViewImage(viewHolder.avater, list.get(i).getAvaterUrl());
+        Glide.with(context).load(list.get(i).getAvaterUrl()).into(viewHolder.avater);
         // 将这个处理好的view返回
         return convertView;
     }

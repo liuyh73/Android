@@ -74,7 +74,8 @@ public class DownloadImage {
                 switch (msg.what) {
                     case 0:
                         Bitmap bmp=(Bitmap)msg.obj;
-                        relativeLayout.setBackground(new BitmapDrawable(ctx.getResources(), bmp));
+                        Drawable drawable = new BitmapDrawable(ctx.getResources(), bmp);
+                        relativeLayout.setBackground(drawable);
                         break;
                 }
             }

@@ -63,9 +63,9 @@ public class BlurBitmapUtil {
      */
     public static void setBlur(Bitmap resBmp, LinearLayout mContainer, Context mRecyclerViewContext) {
         // 将该Bitmap高斯模糊后返回到resBlurBmp
-        Bitmap resBlurBmp = BlurBitmapUtil.blurBitmap(mRecyclerViewContext, resBmp, 15f);
+        Bitmap resBlurBmp = BlurBitmapUtil.blurBitmap(mRecyclerViewContext, resBmp, 20f);
         // 再将resBlurBmp转为Drawable
-        Drawable resBlurDrawable = new BitmapDrawable(resBlurBmp);
+        Drawable resBlurDrawable = new BitmapDrawable(mRecyclerViewContext.getResources(),resBlurBmp);
         // 获取前一页的Drawable
         Drawable preBlurDrawable = mTSDraCacheMap.get(KEY_PRE_DRAW) == null ? resBlurDrawable : mTSDraCacheMap.get(KEY_PRE_DRAW);
 
@@ -82,7 +82,7 @@ public class BlurBitmapUtil {
     public static Bitmap cropBitmap(Bitmap bitmap) {//从中间截取一个16:9图片
         int w = bitmap.getWidth(); // 得到图片的宽，高
         int h = bitmap.getHeight();
-        int cropWidth = 900;
-        return Bitmap.createBitmap(bitmap, (w - cropWidth) / 2+280, 0, cropWidth, h);
+        int cropWidth = 950;
+        return Bitmap.createBitmap(bitmap, (w - cropWidth) / 2+200, 0, cropWidth, h);
     }
 }

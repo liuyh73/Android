@@ -67,9 +67,9 @@
                 android:id="@+id/add_title"/>
         </RelativeLayout>
     </LinearLayout>
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:alpha="0.5"
-        android:src="@color/colorWhite"/>
+    <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="5dp"-->
+        <!--android:alpha="0.5"-->
+        <!--android:src="@color/colorWhite"/>-->
 </LinearLayout>
